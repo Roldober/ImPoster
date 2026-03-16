@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -14,6 +15,7 @@
         #result { margin-top: 20px; display: none; }
         textarea { width: 100%; height: 80px; background: #111; color: #00ff00; border: 1px solid #00ff00; margin-top: 5px; resize: none; box-sizing: border-box; padding: 10px; font-size: 12px; }
         .status { font-size: 12px; margin-bottom: 10px; color: #888; text-transform: uppercase; }
+        #successMsg { color: #ffff00; display: none; margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -23,6 +25,8 @@
         <input type="file" id="fileInput" accept="image/*">
         <button id="uploadBtn" onclick="uploadImage()">ЗАГРУЗИТЬ</button>
         
+        <div id="successMsg">Успешно загружено!</div>
+
         <div id="result">
             <textarea id="bbcode" readonly></textarea>
             <button onclick="copyCode()" style="margin-top:10px; background: #333; color: #00ff00; border: 1px solid #00ff00;">СКОПИРОВАТЬ КОД</button>
@@ -35,13 +39,18 @@
         async function uploadImage() {
             const fileInput = document.getElementById('fileInput');
             const btn = document.getElementById('uploadBtn');
+            const successMsg = document.getElementById('successMsg');
+            const resultDiv = document.getElementById('result');
             const originalBtnText = "ЗАГРУЗИТЬ";
             
+            // Если файл не выбран — предлагаем выбрать его
             if (!fileInput.files[0]) {
-                alert('Сначала выберите файл!');
+                fileInput.click();
                 return;
             }
 
+            successMsg.style.display = 'none';
+            resultDiv.style.display = 'none';
             btn.innerText = 'ЗАГРУЗКА...';
             btn.disabled = true;
 
@@ -59,7 +68,8 @@
                     const imgUrl = data.data.url;
                     const bbCode = `[url=${imgUrl}][img]${imgUrl}[/img][/url]`;
                     document.getElementById('bbcode').value = bbCode;
-                    document.getElementById('result').style.display = 'block';
+                    resultDiv.style.display = 'block';
+                    successMsg.style.display = 'block';
                 } else {
                     alert('Ошибка загрузки');
                 }
@@ -80,4 +90,4 @@
         }
     </script>
 </body>
-          </html>
+</html>
